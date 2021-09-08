@@ -13,10 +13,8 @@ export class NgMatDialogService {
 
     open(component: ComponentType<any>, properties: MatDialogConfig) {
         const dialogRef = this._matDialog.open(component, properties);
-        this._addClickListener(dialogRef.id);
-
-        // wait for dialog element to render in HTML
         setTimeout(() => {
+            this._addClickListener(dialogRef.id);
             this._dialogFocusHandler(dialogRef.id);
         }, 1000);
     }
@@ -42,10 +40,8 @@ export class NgMatDialogService {
             return;
         }
 
-        // get Node of Clicked Dialog
         this.currentClickedElement = clickedDialog?.parentNode?.parentNode;
 
-        // if Node is already on focus, return
         if (
             (this._overlay.getContainerElement().lastChild as Node) ==
             this.currentClickedElement
@@ -53,7 +49,6 @@ export class NgMatDialogService {
             return;
         }
 
-        // Check if dropdown is clicked
         if (document.getElementsByClassName('cdk-overlay-backdrop').length) {
             return;
         }
@@ -66,13 +61,10 @@ export class NgMatDialogService {
     }
 
     private _addClickListener(dialogId: string) {
-        // wait for dialog element to render in HTML
-        setTimeout(() => {
-            document
-                .getElementById(dialogId)
-                ?.addEventListener('click', (event) => {
-                    this._dialogFocusHandler(dialogId, event);
-                });
-        });
+        document
+            .getElementById(dialogId)
+            ?.addEventListener('click', (event) => {
+                this._dialogFocusHandler(dialogId, event);
+            });
     }
 }
